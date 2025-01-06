@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Whishlists</h1>
+
+<div id="whishlists">
+  <% @whishlists.each do |whishlist| %>
+    <%= render whishlist %>
+    <p>
+      <%= link_to "Show this whishlist", whishlist %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New whishlist", new_whishlist_path %>

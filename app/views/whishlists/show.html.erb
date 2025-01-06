@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @whishlist %>
+
+<div>
+  <%= link_to "Edit this whishlist", edit_whishlist_path(@whishlist) %> |
+  <%= link_to "Back to whishlists", whishlists_path %>
+
+  <%= button_to "Destroy this whishlist", @whishlist, method: :delete %>
+</div>

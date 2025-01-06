@@ -1,0 +1,27 @@
+# Utiliza una imagen oficial de Ruby del Docker Hub
+FROM ruby:3.3.3
+
+# Instala dependencias necesarias
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev libsodium-dev nano
+
+# Configura el directorio de trabajo en el contenedor
+WORKDIR /myapp
+
+# Instala Bundler
+RUN gem install bundler
+
+# Copia el archivo Gemfile y Gemfile.lock al contenedor
+COPY Gemfile /myapp/Gemfile
+COPY Gemfile.lock /myapp/Gemfile.lock
+
+# Instala las gemas necesarias
+RUN bundle install
+
+# Copia el resto del código de la aplicación
+COPY . /myapp
+
+# Expone el puerto en el que se ejecutará la aplicación
+EXPOSE 3000
+
+# Comando por defecto para ejecutar cuando se inicia el contenedor
+CMD ["rails", "server", "-b", "0.0.0.0"]
