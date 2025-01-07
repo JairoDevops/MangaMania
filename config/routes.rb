@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
+  devise_for :users
+  root to: "products#index"
+
+
+  
   resources :carshoppings
   resources :whishlists
-  resources :users
   resources :addres
   resources :shopingcars
   resources :whislists
