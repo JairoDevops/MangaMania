@@ -2,6 +2,8 @@
 
 <h1>Carshoppings</h1>
 
+
+
 <div id="carshoppings">
   <% @carshoppings.each do |carshopping| %>
     <%= render carshopping %>
@@ -10,5 +12,14 @@
     </p>
   <% end %>
 </div>
+
+<head>
+  
+</head>
+<body>
+  <h1 class="text-3xl font-bold underline">
+    Hello world!
+  </h1>
+</body>
 
 <%= link_to "New carshopping", new_carshopping_path %>
