@@ -1,9 +1,10 @@
 class CarshoppingsController < ApplicationController
-  before_action :set_carshopping, only: %i[ show edit update destroy ]
+  before_action :set_carshopping, only: %i[show edit update destroy]
+  before_action :authenticate_user!, only: %i[index create]
 
   # GET /carshoppings or /carshoppings.json
   def index
-    @carshoppings = Carshopping.all
+    @carshopping = Carshopping.where(user_id: current_user.id)
   end
 
   # GET /carshoppings/1 or /carshoppings/1.json
@@ -12,7 +13,20 @@ class CarshoppingsController < ApplicationController
 
   # GET /carshoppings/new
   def new
-    @carshopping = Carshopping.new
+    # Buscamos o inicializamos un carrito para el usuario actual
+    @carshopping = Carshopping.find_or_initialize_by(user_id: current_user.id)
+
+    if @carshopping.new_record?
+      @carshopping.total = 0 
+      if @carshopping.save
+        redirect_to @carshopping, notice: "Carrito creado exitosamente."
+      else
+        redirect_to carshoppings_path, alert: "Hubo un problema al crear el carrito."
+      end
+    else
+      
+      redirect_to @carshopping
+    end
   end
 
   # GET /carshoppings/1/edit
@@ -25,7 +39,7 @@ class CarshoppingsController < ApplicationController
 
     respond_to do |format|
       if @carshopping.save
-        format.html { redirect_to @carshopping, notice: "Carshopping was successfully created." }
+        format.html { redirect_to @carshopping, notice: "Carrito creado correctamente." }
         format.json { render :show, status: :created, location: @carshopping }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -38,7 +52,7 @@ class CarshoppingsController < ApplicationController
   def update
     respond_to do |format|
       if @carshopping.update(carshopping_params)
-        format.html { redirect_to @carshopping, notice: "Carshopping was successfully updated." }
+        format.html { redirect_to @carshopping, notice: "Carrito actualizado correctamente." }
         format.json { render :show, status: :ok, location: @carshopping }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -49,21 +63,24 @@ class CarshoppingsController < ApplicationController
 
   # DELETE /carshoppings/1 or /carshoppings/1.json
   def destroy
-    @carshopping.destroy!
+    @carshopping.destroy
 
     respond_to do |format|
-      format.html { redirect_to carshoppings_path, status: :see_other, notice: "Carshopping was successfully destroyed." }
+      format.html { redirect_to carshoppings_path, notice: "Carrito eliminado correctamente." }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+    
     def set_carshopping
-      @carshopping = Carshopping.find(params[:id])
+      @carshopping = Carshopping.find_by(id: params[:id])
+      unless @carshopping
+        redirect_to carshoppings_path, alert: 'Carrito no encontrado.'
+      end
     end
 
-    # Only allow a list of trusted parameters through.
+    # Solo permitir parámetros confiables para la creación o actualización de un carrito
     def carshopping_params
       params.require(:carshopping).permit(:total, :user_id, :product_id)
     end

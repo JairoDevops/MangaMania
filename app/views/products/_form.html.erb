@@ -25,6 +25,11 @@
   </div>
 
   <div class="field">
+    <%= form.label :editorial %>
+    <%= form.collection_select :editorial_id, Editorial.all, :id, :name, prompt: "Select an Editorial" %>
+  </div>
+
+  <div class="field">
     <%= form.label :img, "Image" %>
     <%= form.file_field :img %>  <!-- Este es el campo de la imagen -->
   </div>
