@@ -1,10 +1,12 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: %i[ show edit update destroy ]
-
+  before_action :find_or_create_cart, only: %i[ index show create ]
+  
   # GET /products or /products.json
   def index
     @products = Product.all
     @categories = Category.all
+    @editorials = Editorial.all
   end
 
   # GET /products/1 or /products/1.json
@@ -66,6 +68,14 @@ class ProductsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def product_params
-      params.require(:product).permit(:name, :price, :stock, :description, :category_id, :img)
+      params.require(:product).permit(:name, :price, :stock, :description, :category_id, :img, :editorial_id)
     end
+
+
+    def find_or_create_cart
+      if user_signed_in? 
+        @carshopping = Carshopping.find_or_create_by(user_id: current_user.id)
+      end
+    end
+
 end
