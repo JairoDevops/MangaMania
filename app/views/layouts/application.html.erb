@@ -21,11 +21,11 @@
   <body>
     <nav class="bg-gray-800 text-white p-4">
       <div class="max-w-7xl mx-auto flex justify-between items-center">
-        <a href="#" class="text-xl font-semibold hover:text-gray-300">MangaMania</a>
+        <a href=<%= products_path %> class="text-xl font-semibold hover:text-gray-300">MangaMania</a>
         <div class="space-x-6">
         <a href="<%= carshoppings_path %>" class="hover:text-gray-300">
-        <i class="fa fa-shopping-cart"></i> 
-      </a>
+      <i class="fa fa-shopping-cart"></i> 
+    </a>
           <a href="<%= products_path %>" class="hover:text-gray-300">Productos</a>
           <% if user_signed_in? %>
             <%= button_to 'Cerrar sesión', destroy_user_session_path, method: :delete, class: 'hover:text-gray-300' %>

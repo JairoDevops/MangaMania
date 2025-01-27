@@ -1,17 +1,27 @@
-<div id="<%= dom_id carshopping %>">
+<div id="<%= dom_id(@carshopping) %>" class="space-y-6">
   <p>
     <strong>Total:</strong>
-    <%= carshopping.total %>
+    <%= @carshopping.total %>
   </p>
 
   <p>
     <strong>User:</strong>
-    <%= carshopping.user_id %>
+    <%= current_user.email %>
   </p>
+  <%= button_to 'Comprar', shop_from_cart_path, method: :post, class: 'btn btn-primary mt-2 bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600' %>
+       
 
-  <p>
-    <strong>Product:</strong>
-    <%= carshopping.product_id %>
-  </p>
+  <h3 class="text-2xl font-semibold">Productos en el Carrito:</h3>
 
+  <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+    <% @carshopping.list_products.each do |list_product| %>
+      <% product = list_product.product %>
+        <div class="p-4">
+          <h4 class="text-md font-semibold text-gray-800 truncate"><%= product.name %></h4>
+          <p class="text-sm text-gray-600"><%= number_to_currency(product.price) %></p>
+          <%= button_to 'Eliminar', remove_from_cart_path(list_product), method: :delete, class: 'btn btn-primary mt-2 bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

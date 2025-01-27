@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_20_153542) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_27_171832) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -55,12 +55,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_20_153542) do
   end
 
   create_table "carshoppings", force: :cascade do |t|
-    t.integer "total"
-    t.bigint "product_id", null: false
+    t.integer "total", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "user_id"
-    t.index ["product_id"], name: "index_carshoppings_on_product_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -73,6 +71,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_20_153542) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "list_products", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.bigint "carshopping_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status"
+    t.index ["carshopping_id"], name: "index_list_products_on_carshopping_id"
+    t.index ["product_id"], name: "index_list_products_on_product_id"
+    t.index ["user_id"], name: "index_list_products_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -116,7 +126,10 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_20_153542) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "carshoppings", "products"
+  add_foreign_key "carshoppings", "users"
+  add_foreign_key "list_products", "carshoppings"
+  add_foreign_key "list_products", "products"
+  add_foreign_key "list_products", "users"
   add_foreign_key "products", "categories"
   add_foreign_key "products", "editorials"
   add_foreign_key "whishlists", "products"
